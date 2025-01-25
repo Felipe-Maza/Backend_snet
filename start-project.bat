@@ -1,0 +1,1 @@
+start cmd.exe /k "cd /d D:\Proyecto_full_Stack\Backend_snet && npm run start:watch"
