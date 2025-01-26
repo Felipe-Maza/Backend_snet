@@ -12,12 +12,14 @@ const UserSchema = Schema ({
     nick:{
         type:String,
         required:true,
-        unique:true
+        unique: true,
+        lowercase: true
     },
     email:{
         type:String,
         required:true,
-        unique:true
+        unique:true,
+        lowercase: true
     },
     bio: String,
     password:{

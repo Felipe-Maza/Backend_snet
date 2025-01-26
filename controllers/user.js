@@ -1,5 +1,6 @@
 import User from "../models/user.js"
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
+import { createToken } from "../services/jwt.js";
 
 // METODO REGISTRO DE USUARIOS 
 export const register = async (req,res) =>{
@@ -47,7 +48,6 @@ export const register = async (req,res) =>{
         //DEVOLVER EL USUARIO REGISTRADO
         return res.status(200).json({
             message: "Registro exitoso",
-            params,
             user_to_save
         })
     } catch (error) {
@@ -58,5 +58,95 @@ export const register = async (req,res) =>{
             status: "error",
             message: "Error en el registro de usuario"
         })
+    }
+}
+
+//METODO DE PRUEBA 
+export const testUser = (req,res) =>{
+    return res.status(200).send({
+        message:"Hola Usuario"
+    });
+}
+
+// METODO DE AUNTENTICACION DE USUARIOS (LOGIN)
+
+export const login = async (req, res) => {
+    try {
+        // OBTENER LOS PARAMETROS DEL BODY
+        let params = req.body;
+
+        // VALIDAR PARAMETROS: EMAIL,PASSWORD
+        if (!params.email || !params.password) {
+            return res.status(400).send({
+                status: "Error",
+                message: "No envió el email o el password"
+            });
+        }
+
+        // BUSCAR EN LA BASE DE DATOS SI EXISTE EL EMAIL RECIBIDO   
+        const user = await User.findOne({email: params.email.toLowerCase()});
+
+        // BUSCAR SI EXISTE EL USUARIO
+        if (!user) {
+            return res.status(404).send({
+                status: "Error al buscar",
+                message: "Usuario no encontrado"
+            });
+        }
+
+        // COMPROBAR LA CONTRASEÑA
+        const validPassword = await bcrypt.compare(params.password, user.password);
+
+        // SI LA CONTRASEÑA ES INCORRECTA
+        if (!validPassword) {
+            return res.status(401).send({
+                status: "Error password",
+                message: "Contraseña incorrecta"
+            });
+        }
+
+        // GENERAR EL TOKEN DE AUTENTICACION 
+        const token = createToken(user);
+
+        // DEVOLVER EL TOKEN
+        if(!token){
+            return res.status(400).send({
+                status: "Error token",
+                message: "Error al enviar el token"
+            })
+        }else{
+            return res.status(200).json({
+                status: "success",
+                message: "Token enviado exitosamente",
+                token,
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    last_name: user.last_name,
+                    email: user.email,
+                    nick: user.nick,
+                    image: user.image,
+                    create_user: user.created_at
+                }
+            });
+        }
+
+
+        // DEVOLVER EL USUARIO REGISTRADO
+        return res.status(200).json({
+            status: "success",
+            message: "Inicio de sesión exitoso",
+            user: {
+                name: user.name,
+                email: user.email
+            }
+        });
+    } catch (error) {
+        console.error("Error en el login: ", error);
+
+        return res.status(500).send({
+            status: "Error",
+            message: "Ocurrió un error inesperado en el login"
+        });
     }
 }
