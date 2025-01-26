@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import UserRoutes from "./routers/user.js";
 import PublicationRoutes from "./routers/publication.js";
-import FollowRoutes from "./routers/follow.js"
+import FollowRoutes from "./routers/follow.js";
 
 
 // MENSAJE DE BIENVENIDA PARA VERIFICAR QUE TODO FUNCIONE CORRECTAMENTE
@@ -36,16 +36,7 @@ app.use('/api/user',UserRoutes);
 app.use('/api/publication',PublicationRoutes);
 app.use('/api/follow',FollowRoutes);
 
-//RUTA DE PRUEBA 
-app.get('/ruta-prueba',(req,res) => {
-    return res.status(200).json(
-        {
-            'id':1,
-            'nombre':'Felipe',
-            'username':'Elcalvoman'
-        }
-    );
-});
+
 
 //CONFIGURACION DEL SERVIDOR DE NODE.JS
 app.listen(puerto, () => {
