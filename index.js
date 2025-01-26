@@ -2,6 +2,9 @@ import express from "express";
 import connection from "./database/connection.js";
 import bodyParser from "body-parser";
 import cors from "cors";
+import UserRoutes from "./routers/user.js";
+import PublicationRoutes from "./routers/publication.js";
+import FollowRoutes from "./routers/follow.js"
 
 
 // MENSAJE DE BIENVENIDA PARA VERIFICAR QUE TODO FUNCIONE CORRECTAMENTE
@@ -28,7 +31,10 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-//CONFIGURAR LAS RUTAS DEL APLICATIVO
+//CONFIGURAR LAS RUTAS DEL APLICATIVO {esto es una ruta general}
+app.use('/api/user',UserRoutes);
+app.use('/api/publication',PublicationRoutes);
+app.use('/api/follow',FollowRoutes);
 
 //RUTA DE PRUEBA 
 app.get('/ruta-prueba',(req,res) => {
