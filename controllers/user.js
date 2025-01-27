@@ -64,7 +64,8 @@ export const register = async (req,res) =>{
 //METODO DE PRUEBA 
 export const testUser = (req,res) =>{
     return res.status(200).send({
-        message:"Hola Usuario"
+        message:"Hola Usuario",
+        user:req.user
     });
 }
 
@@ -150,3 +151,6 @@ export const login = async (req, res) => {
         });
     }
 }
+
+//METODO PARA MOSTRAR EL PERFIL DEL USUARIO 
+

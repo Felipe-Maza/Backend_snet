@@ -10,6 +10,8 @@ const createToken = (user) => {
     const payload = {
         userId: user._id,
         userRol: user.role,
+        name: user.name,
+        nick: user.nick,
         //FECHA DE EMISION
         iat: moment().unix(),
         expiracion: moment().add(30,'days').unix()
